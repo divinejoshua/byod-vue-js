@@ -6,8 +6,23 @@
         <div class="container-fluid pt-3">
           <a class="navbar-brand fw-bold" href="#">
             <img src="@/assets/logo.png" alt="" width="24" height="24" class="shadow-sm d-inline-block align-text-top">
-            BYOD - Bring Your Own Data
+            BYOD
           </a>
+
+          <span class='float-right'>
+              <!-- Link to codebase  -->
+              <a href='https://github.com/divinejoshua/byod-vue-js' rel="noreferrer" target="_blank">
+                <i class="fa fa-brands fa-github text-gray-400"></i>
+              </a>
+              &nbsp;&nbsp;
+
+               <!-- Link to twitter account  -->
+              <a href='https://twitter.com/Divine_Er' rel="noreferrer" target="_blank" >
+                <i class="fa fa-brands fa-twitter text-gray-400"></i>
+              </a>
+          </span>
+
+
         </div>
       </nav>
 
@@ -23,18 +38,31 @@
             Our AI algorithms are designed to learn from your input, so the more you use the app, the smarter it becomes. Whether you're a business professional, researcher, or student, Boyd is the perfect tool for anyone who needs to work with large amounts of data in their word documents.
         </p> -->
 
-        messagesData:
-        {{messagesData}}
-
       <!-- Data context form  -->
-        <form>
             <div class="mb-3">
                 <label class="text-muted fw-bold text-sm mb-2">Paste your data here</label>
-                <textarea class="form-control text-sm pt-3" rows="5" placeholder="" v-model="contextData"></textarea>
+                <textarea class="form-control text-sm pt-3" rows="5" placeholder="You must provide a context here..." v-model="contextData"></textarea>
             </div>
-                <label class="text-muted fw-bold text-sm mb-2">Result</label>
             
-        </form>
+
+        <!-- The result display  -->
+         <label class="text-muted fw-bold text-sm mb-2" v-if="!resultDisplay.question">Result</label>
+
+      <!-- Conversations -->
+      <div>
+
+        <!-- Result display question  -->
+        <div v-if="resultDisplay.question">
+          <label class="text-deep-blue fw-bold text-sm mb-2">Question</label>
+          <div class="text-sm">{{resultDisplay.question}}</div>
+        </div>
+
+        <!-- Result display answer  -->
+        <div v-if="resultDisplay.answer">
+          <label class="text-deep-blue fw-bold text-sm mb-2 mt-4">Answer</label>
+          <div class="text-sm">{{resultDisplay.answer}}</div>
+        </div>
+      </div>         
 
 
       </main>
@@ -42,10 +70,13 @@
 
       <!-- The bottom text input  -->
       <div class="bottom-bar">
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Ask question" aria-label="" aria-describedby="" v-model="question">
-        <button class="btn btn-outline-secondary" type="button" @click="submitForm()">Search</button>
-        </div>
+         <form method="post" @submit.prevent="submitForm()">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Ask question" aria-label="" aria-describedby="" v-model="question">
+              <button class="btn btn-outline-secondary" @disabled="true" type="submit">Ask</button>        
+            </div>
+        </form>
+
       </div>
   
   </div>
@@ -62,11 +93,15 @@ let question = ref("");
 let answer = ref("");
 let isLoading = ref(false);
 let messagesData = ref([]);
+let resultDisplay = ref({
+  question: '',
+  answer: ''
+});
 
 
 // Create configuration object
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.VUE_APP_OPENAI_API_KEY,
 });
 
 // create OpenAI configuration object
@@ -81,16 +116,20 @@ const openai = new OpenAIApi(configuration);
     // This method submits the form
     async function submitForm(){
 
-      this.messagesData = []
-
-      this.messagesData.push({role: "assistant", content: contextData})
-      this.messagesData.push({role: "user", content: "first"})
-
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
+      // Add the contextData and question to the messagesData object
+      if(messagesData.length == 0) { //This if statement checks if there is already a context data, so it shouldnt add it again 
+        this.messagesData.push({role: "assistant", content: this.contextData})
+      }
+      this.messagesData.push({role: "user", content: this.question})
 
-      this.isLoading = true
+
+      this.resultDisplay.question = this.question //Add the display question
+
+
+      this.isLoading = true //Start the loading
 
       // Send the request 
       try {
@@ -103,11 +142,14 @@ const openai = new OpenAIApi(configuration);
           frequency_penalty: 0,
           presence_penalty: 0,
           stop: ["{}"],
-          messages: newMessages,
+          messages: messagesData.value,
         });
 
         //set the result to answer
         this.answer = response.data.choices[0].message.content
+        this.messagesData.push({role: "assistant", content: this.answer})
+
+        this.resultDisplay.answer = this.answer //Add the display answer
 
         }
 
@@ -116,8 +158,8 @@ const openai = new OpenAIApi(configuration);
         }
 
         finally{
-
-          console.log(isLoading.value)
+          this.isLoading=false
+          console.log(messagesData.value)
         }
 
 
@@ -129,7 +171,7 @@ const openai = new OpenAIApi(configuration);
 
 //lifecycle hooks
 onMounted(() => {
-  console.log('Application started');
+  console.log('BYOD Application started');
 })
 
 </script>

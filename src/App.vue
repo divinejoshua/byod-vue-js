@@ -20,5 +20,12 @@
   max-width: 800px;
   padding:15px;
 }
+a{
+  color: #888;
+}
+
+.text-deep-blue{
+  color: #3B82F6;
+}
 
 </style>
