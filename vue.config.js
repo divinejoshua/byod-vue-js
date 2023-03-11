@@ -16,12 +16,6 @@ module.exports = defineConfig({
     maskIcon: 'img/icons/favico.png',
     msTileImage: 'img/icons/favico.png',
 
-    // configure the workbox plugin
-    workboxPluginMode: 'InjectManifest',
-    workboxOptions: {
-      // swSrc is required in InjectManifest mode.
-      swSrc: 'dev/sw.js',
-      // ...other Workbox options...
-    }
+   
   }
 })
