@@ -149,9 +149,9 @@
       console.log(messagesData.value)
 
 
-      resultDisplay.question = question //Add the display question
-      question = "" //Clear the question string
-      isLoading = true //Start the loading
+      resultDisplay.value.question = question.value //Add the display question
+      question.value = "" //Clear the question string
+      isLoading.value = true //Start the loading
 
          
 
