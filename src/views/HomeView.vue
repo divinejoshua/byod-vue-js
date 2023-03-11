@@ -138,7 +138,7 @@
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
-      this.isErrorRequest.value = false //Set error to false 
+      isErrorRequest.value = false //Set error to false 
 
       this.messagesData = []
 
