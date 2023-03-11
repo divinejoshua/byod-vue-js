@@ -52,15 +52,16 @@
       <div>
 
         <!-- Result display question  -->
-        <div v-if="resultDisplay.question">
+        <div v-if="resultDisplay.question" class="display-result">
           <label class="text-deep-blue fw-bold text-sm mb-2">Question</label>
           <div class="text-sm">{{resultDisplay.question}}</div>
         </div>
 
         <!-- Result display answer  -->
-        <div v-if="resultDisplay.answer">
+        <div v-if="resultDisplay.answer || (isLoading && resultDisplay.question)" class="display-result">
           <label class="text-deep-blue fw-bold text-sm mb-2 mt-4">Answer</label>
-          <div class="text-sm">{{resultDisplay.answer}}</div>
+          <div class="text-sm text-muted" v-if="isLoading">Searching...</div>
+          <div class="text-sm" v-else>{{resultDisplay.answer}}</div>
         </div>
       </div>         
 
@@ -119,14 +120,16 @@ const openai = new OpenAIApi(configuration);
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
+     this.messagesData = []
+
       // Add the contextData and question to the messagesData object
-      if(messagesData.length == 0) { //This if statement checks if there is already a context data, so it shouldnt add it again 
-        this.messagesData.push({role: "assistant", content: this.contextData})
-      }
+      this.messagesData.push({role: "assistant", content: this.contextData})
       this.messagesData.push({role: "user", content: this.question})
 
 
       this.resultDisplay.question = this.question //Add the display question
+
+      this.question = "" //Clear the question string
 
 
       this.isLoading = true //Start the loading
@@ -159,7 +162,6 @@ const openai = new OpenAIApi(configuration);
 
         finally{
           this.isLoading=false
-          console.log(messagesData.value)
         }
 
 

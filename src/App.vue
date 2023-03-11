@@ -28,4 +28,18 @@ a{
   color: #3B82F6;
 }
 
+.display-result{
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+    from {
+    opacity: 0;
+    }
+    to {
+    opacity: 1;
+    }
+}
+
 </style>
