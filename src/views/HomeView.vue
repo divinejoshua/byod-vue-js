@@ -138,9 +138,9 @@
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
-      this.messagesData = []
+      this.isErrorRequest.value = false //Set error to false 
 
-      this.isErrorRequest = false //Set error to false 
+      this.messagesData = []
 
       // Add the contextData and question to the messagesData object
       this.messagesData.push({role: "assistant", content: this.contextData})
@@ -181,7 +181,7 @@
         }
 
         catch{
-          this.isErrorRequest = true
+          this.isErrorRequest.value = true
         }
 
         finally{
