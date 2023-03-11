@@ -70,7 +70,7 @@
           <div class="text-sm" v-else>{{resultDisplay.answer}} </div>
         </div>
 
-         <div v-if="isError" class="display-result">
+         <div v-if="isErrorRequest" class="display-result">
           <label class="text-danger fw-bold text-sm mb-2 mt-4">Error</label>
           <div class="text-sm text-danger">An error has occured. Could be due to overloaded context data</div>
         </div>
@@ -108,7 +108,7 @@
     let question = ref("");
     let answer = ref("");
     let isLoading = ref(false);
-    let isError = ref(false);
+    let isErrorRequest = ref(false);
     let messagesData = ref([]);
     let resultDisplay = ref({question: '', answer: ''});
     let typewriterText = ref('')
@@ -138,7 +138,7 @@
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
-      this.isError = false //Set error to false 
+      this.isErrorRequest = false //Set error to false 
 
       this.messagesData = []
 
@@ -181,7 +181,7 @@
         }
 
         catch{
-          this.isError = true
+          this.isErrorRequest = true
         }
 
         finally{
