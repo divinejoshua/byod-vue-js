@@ -27,7 +27,7 @@
         <form>
             <div class="mb-3">
                 <label class="text-muted fw-bold text-sm mb-2">Paste your data here</label>
-                <textarea class="form-control text-sm pt-3" rows="5" placeholder=""></textarea>
+                <textarea class="form-control text-sm pt-3" rows="5" placeholder="" v-model="contextData"></textarea>
             </div>
                 <label class="text-muted fw-bold text-sm mb-2">Result</label>
             
@@ -40,8 +40,8 @@
       <!-- The bottom text input  -->
       <div class="bottom-bar">
         <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Ask question" aria-label="Recipient's username" aria-describedby="button-addon2">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+        <input type="text" class="form-control" placeholder="Ask question" aria-label="" aria-describedby="" v-model="question">
+        <button class="btn btn-outline-secondary" type="button" @click="submitForm()">Search</button>
         </div>
       </div>
   
@@ -53,12 +53,24 @@
 import { ref, onMounted } from 'vue';
 
 //state
-const counter = ref(0);
+const contextData = ref("");
+const question = ref("");
+const answer = ref("");
+
+
 
 // methods
-function increment(num) {
-  counter.value = num++;
-  }
+// This method submits the form
+function submitForm(){
+
+  console.log(contextData.value)
+  console.log(question.value)
+  
+
+
+}
+
+
 function decrement(num) {
   counter.value = num--;
 }
