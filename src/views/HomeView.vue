@@ -60,13 +60,19 @@
         <!-- Result display answer  -->
         <div v-if="resultDisplay.answer || (isLoading && resultDisplay.question)" class="display-result">
           <label class="text-deep-blue fw-bold text-sm mb-2 mt-4">Answer</label>
+
+          <!-- Display loader  -->
           <div class="text-sm text-muted" v-if="isLoading">Searching...</div>
-          <div class="text-sm" v-else>{{resultDisplay.answer}}</div>
+          <!-- Show the typewiter effect for answer -->
+          <div class="text-sm" v-else-if="isTyping">{{typewriterText}} </div> 
+          <!-- Main answers  -->
+          <div class="text-sm" v-else>{{resultDisplay.answer}} </div>
         </div>
       </div>         
 
 
       </main>
+
 
 
       <!-- The bottom text input  -->
@@ -83,36 +89,39 @@
   </div>
 </template>
 
-<script setup>
-/* eslint-disable */
-import { ref, onMounted } from 'vue';
-import { Configuration, OpenAIApi } from "openai";    //OpenAI 
+  <script setup>
+    /* eslint-disable */
+    import { ref, onMounted, reactive } from 'vue';
+    import { Configuration, OpenAIApi } from "openai";    //OpenAI 
+    // import Typewriter from "typewriter-vue";    //Typewriter effect 
 
-//state
-let contextData = ref("");
-let question = ref("");
-let answer = ref("");
-let isLoading = ref(false);
-let messagesData = ref([]);
-let resultDisplay = ref({
-  question: '',
-  answer: ''
-});
+    //state
+    let contextData = ref("");
+    let question = ref("");
+    let answer = ref("");
+    let isLoading = ref(false);
+    let messagesData = ref([]);
+    let resultDisplay = ref({question: '', answer: ''});
+    let typewriterText = ref('')
+    let isTyping = ref(true);
 
+    let phrases = reactive([]) //This is used by the Typewriter
 
-// Create configuration object
-const configuration = new Configuration({
-  apiKey: process.env.VUE_APP_OPENAI_API_KEY,
-});
+    // Create configuration object
+    const configuration = new Configuration({
+      apiKey: process.env.VUE_APP_OPENAI_API_KEY,
+    });
 
-// create OpenAI configuration object
-const openai = new OpenAIApi(configuration);
-
-
-
+    // create OpenAI configuration object
+    const openai = new OpenAIApi(configuration);
 
 
-// =====methods
+
+
+
+
+
+    // =====methods
 
     // This method submits the form
     async function submitForm(){
@@ -128,11 +137,11 @@ const openai = new OpenAIApi(configuration);
 
 
       this.resultDisplay.question = this.question //Add the display question
-
       this.question = "" //Clear the question string
-
-
       this.isLoading = true //Start the loading
+
+         
+
 
       // Send the request 
       try {
@@ -154,6 +163,10 @@ const openai = new OpenAIApi(configuration);
 
         this.resultDisplay.answer = this.answer //Add the display answer
 
+        // Typewriter effect 
+        this.phrases.push(this.answer) //Add the answer to the phrases
+        isTyping = true //Set isTyping to true
+        typeWriterLoop() //start the Typewritter loop
         }
 
         catch{
@@ -162,18 +175,70 @@ const openai = new OpenAIApi(configuration);
 
         finally{
           this.isLoading=false
+          
         }
 
 
     }
 
+    // ========Custom made typewiter effect 
+      let opt = reactive({
+        currentPhraseIndex: 0, 
+        currentCharacterIndex: 0, 
+        currentPhrase: "", 
+        isDeleting: false
+      })
+      
+
+      // Typewriter loop
+        const typeWriterLoop = () => {
+          console.log("here")
+          if(!phrases[0]) {return}
+          let currentPhraseText = phrases[opt.currentPhraseIndex];
+          if (!opt.isDeleting) {
+            // Starts typing one after the order 
+            try {
+              opt.currentPhrase += currentPhraseText[opt.currentCharacterIndex];
+            }
+            catch{
+              return
+            }
+            opt.currentCharacterIndex++;
+          } 
+          else {
+            opt.currentPhrase = opt.currentPhrase.slice(0, -1);
+            opt.currentCharacterIndex--;
+          }
+          // Set the value 
+          typewriterText.value = opt.currentPhrase;
+
+          if (opt.currentCharacterIndex === currentPhraseText.length) {
+            // Done typing 
+            opt.isDeleting = true;
+            isTyping = false
+            
+          }
+
+          
+          if (opt.currentCharacterIndex === 0) {
+            opt.currentPhrase = "";
+            opt.isDeleting = false;
+            opt.currentPhraseIndex++;
+            if (opt.currentPhraseIndex === opt.phrases?.length) {
+              opt.currentPhraseIndex = 0;
+            }
+          }
+          
+          setTimeout(typeWriterLoop, 25);
+        }
 
 
 
 
-//lifecycle hooks
-onMounted(() => {
-  console.log('BYOD Application started');
-})
 
-</script>
+    //lifecycle hooks
+    onMounted(() => {
+      console.log('BYOD Application started');
+    })
+
+  </script>
