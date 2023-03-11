@@ -53,7 +53,7 @@
       <div>
 
         <!-- Result display question  -->
-        <div v-if="resultDisplay.question" class="display-result">
+        <div v-if="resultDisplay.question" class="display-result mt-4">
           <label class="text-deep-blue fw-bold text-sm mb-2">Question</label>
           <div class="text-sm">{{resultDisplay.question}}</div>
         </div>

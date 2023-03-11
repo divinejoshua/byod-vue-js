@@ -19,6 +19,9 @@
   width: 100%;
   max-width: 800px;
   padding:15px;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 a{
   color: #888;
