@@ -146,6 +146,8 @@
       messagesData.push({role: "assistant", content: contextData})
       messagesData.push({role: "user", content: question})
 
+      console.log(messagesData.value)
+
 
       resultDisplay.question = question //Add the display question
       question = "" //Clear the question string
