@@ -31,12 +31,13 @@
       <main class="mt-10" style="padding:15px">
         <br>
         <h5>Information re-defined</h5>
-
         <br>
-        <!-- <p class="text-muted text-sm">BYOD (Bring Your Own Data) a powerful tool that uses artificial intelligence to help you fine-tune data from your word documents. With Boyd, you can easily extract and analyze data from your documents, such as names, dates, and numbers, and then use our intuitive interface to make adjustments and corrections as needed. 
+        <p class="text-muted text-sm">BYOD (Bring Your Own Data) a powerful tool that uses artificial intelligence to help you fine-tune data from your document. 
+          
+          <!-- With Boyd, you can easily extract and analyze data from your documents, such as names, dates, and numbers, and then use our intuitive interface to make adjustments and corrections as needed. 
             <br><br>
-            Our AI algorithms are designed to learn from your input, so the more you use the app, the smarter it becomes. Whether you're a business professional, researcher, or student, Boyd is the perfect tool for anyone who needs to work with large amounts of data in their word documents.
-        </p> -->
+            Our AI algorithms are designed to learn from your input, so the more you use the app, the smarter it becomes. Whether you're a business professional, researcher, or student, Boyd is the perfect tool for anyone who needs to work with large amounts of data in their word documents. -->
+        </p>
 
       <!-- Data context form  -->
             <div class="mb-3">
@@ -68,8 +69,15 @@
           <!-- Main answers  -->
           <div class="text-sm" v-else>{{resultDisplay.answer}} </div>
         </div>
-      </div>         
 
+         <div v-if="isError" class="display-result">
+          <label class="text-danger fw-bold text-sm mb-2 mt-4">Error</label>
+          <div class="text-sm text-danger">An error has occured. Could be due to overloaded context data</div>
+        </div>
+
+
+      </div>         
+      <br><br><br><br><br><br><br><br>
 
       </main>
 
@@ -100,6 +108,7 @@
     let question = ref("");
     let answer = ref("");
     let isLoading = ref(false);
+    let isError = ref(false);
     let messagesData = ref([]);
     let resultDisplay = ref({question: '', answer: ''});
     let typewriterText = ref('')
@@ -129,7 +138,9 @@
       if(isLoading.value==true) { return } //Return if the form is loading
       if (!contextData.value || !question.value) { return }  // Return if there is no question or contextData 
 
-     this.messagesData = []
+      this.isError = false //Set error to false 
+
+      this.messagesData = []
 
       // Add the contextData and question to the messagesData object
       this.messagesData.push({role: "assistant", content: this.contextData})
@@ -170,7 +181,7 @@
         }
 
         catch{
-
+          this.isError = true
         }
 
         finally{
@@ -192,7 +203,6 @@
 
       // Typewriter loop
         const typeWriterLoop = () => {
-          console.log("here")
           if(!phrases[0]) {return}
           let currentPhraseText = phrases[opt.currentPhraseIndex];
           if (!opt.isDeleting) {
