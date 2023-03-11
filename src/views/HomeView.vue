@@ -140,16 +140,16 @@
 
       isErrorRequest.value = false //Set error to false 
 
-      this.messagesData = []
+      messagesData = []
 
       // Add the contextData and question to the messagesData object
-      this.messagesData.push({role: "assistant", content: this.contextData})
-      this.messagesData.push({role: "user", content: this.question})
+      messagesData.push({role: "assistant", content: contextData})
+      messagesData.push({role: "user", content: question})
 
 
-      this.resultDisplay.question = this.question //Add the display question
-      this.question = "" //Clear the question string
-      this.isLoading = true //Start the loading
+      resultDisplay.question = question //Add the display question
+      question = "" //Clear the question string
+      isLoading = true //Start the loading
 
          
 
@@ -169,23 +169,23 @@
         });
 
         //set the result to answer
-        this.answer = response.data.choices[0].message.content
-        this.messagesData.push({role: "assistant", content: this.answer})
+        answer = response.data.choices[0].message.content
+        messagesData.push({role: "assistant", content: answer})
 
-        this.resultDisplay.answer = this.answer //Add the display answer
+        resultDisplay.answer = answer //Add the display answer
 
         // Typewriter effect 
-        this.phrases.push(this.answer) //Add the answer to the phrases
+        phrases.push(answer) //Add the answer to the phrases
         isTyping = true //Set isTyping to true
         typeWriterLoop() //start the Typewritter loop
         }
 
         catch{
-          this.isErrorRequest.value = true
+          isErrorRequest.value = true
         }
 
         finally{
-          this.isLoading=false
+          isLoading=false
           
         }
 
