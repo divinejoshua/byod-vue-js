@@ -143,8 +143,8 @@
       messagesData.value = []
 
       // Add the contextData and question to the messagesData object
-      messagesData.value.push({role: "assistant", content: contextData})
-      messagesData.value.push({role: "user", content: question})
+      messagesData.value.push({role: "assistant", content: contextData.value})
+      messagesData.value.push({role: "user", content: question.value})
 
       console.log(messagesData.value)
 
