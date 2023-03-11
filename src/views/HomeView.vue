@@ -59,21 +59,21 @@ const answer = ref("");
 
 
 
-// methods
+// =====methods
+
 // This method submits the form
 function submitForm(){
 
-  console.log(contextData.value)
-  console.log(question.value)
-  
+    // Return if there is no question or contextData 
+  if (!contextData.value || !question.value) { return }
 
 
 }
 
 
-function decrement(num) {
-  counter.value = num--;
-}
+
+
+
 //lifecycle hooks
 onMounted(() => {
   console.log('Application started');
