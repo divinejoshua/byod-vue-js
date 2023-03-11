@@ -171,14 +171,14 @@
         });
 
         //set the result to answer
-        answer = response.data.choices[0].message.content
-        messagesData.push({role: "assistant", content: answer})
+        answer.value = response.data.choices[0].message.content
+        messagesData.value.push({role: "assistant", content: answer.value })
 
-        resultDisplay.answer = answer //Add the display answer
+        resultDisplay.value.answer = answer.value //Add the display answer
 
         // Typewriter effect 
-        phrases.push(answer) //Add the answer to the phrases
-        isTyping = true //Set isTyping to true
+        phrases.push(answer.value) //Add the answer to the phrases
+        isTyping.value = true //Set isTyping to true
         typeWriterLoop() //start the Typewritter loop
         }
 
@@ -187,7 +187,7 @@
         }
 
         finally{
-          isLoading=false
+          isLoading.value=false
           
         }
 
@@ -227,7 +227,7 @@
           if (opt.currentCharacterIndex === currentPhraseText.length) {
             // Done typing 
             opt.isDeleting = true;
-            isTyping = false
+            isTyping.value = false
             
           }
 
