@@ -114,7 +114,7 @@
     let typewriterText = ref('')
     let isTyping = ref(true);
 
-    let phrases = reactive([]) //This is used by the Typewriter 
+    let phrases = reactive([]) //This is used by the Typewriter  
 
     // Create configuration object
     const configuration = new Configuration({
