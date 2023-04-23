@@ -9,7 +9,7 @@
             BYOD
           </a>
 
-          <span class='float-right'>
+          <span class='float-right'> 
               <!-- Link to codebase  -->
               <a href='https://github.com/divinejoshua/byod-vue-js' rel="noreferrer" target="_blank">
                 <i class="fa fa-brands fa-github text-gray-400"></i>
